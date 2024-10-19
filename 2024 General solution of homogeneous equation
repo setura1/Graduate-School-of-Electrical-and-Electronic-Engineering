@@ -1,0 +1,47 @@
+import sympy as sp
+
+# 変数の定義 / Define variables
+x = sp.symbols('x')
+c1, c2, a, b = sp.symbols('c1 c2 a b')
+
+# 特性方程式の定義 / Define characteristic equation
+λ = sp.symbols('λ')
+char_eq = λ**2 + a * λ + b
+
+# 特性方程式の解 / Solve characteristic equation
+λ_solutions = sp.solve(char_eq, λ)
+λ1, λ2 = λ_solutions[0], λ_solutions[1]
+
+# 判別式 D / Discriminant D
+D = a**2 - 4*b
+
+# 判別式 D の性質をチェック / Check the properties of the discriminant D
+D_is_positive = D.is_positive
+D_is_zero = D.is_zero
+D_is_negative = D.is_negative
+
+# 同次方程式の一般解の計算 / General solution of homogeneous equation
+
+# Case 1: D > 0 (Real distinct roots)
+if D_is_positive:
+    general_solution = c1 * sp.exp(λ1 * x) + c2 * sp.exp(λ2 * x)
+    print("General solution (D > 0):")
+    sp.pprint(general_solution)
+
+# Case 2: D = 0 (Real repeated roots)
+elif D_is_zero:
+    general_solution = (c1 * x + c2) * sp.exp(λ1 * x)
+    print("General solution (D = 0):")
+    sp.pprint(general_solution)
+
+# Case 3: D < 0 (Complex conjugate roots)
+elif D_is_negative:
+    p = -a / 2  # Real part of complex roots
+    q = sp.sqrt(abs(D)) / 2  # Imaginary part of complex roots
+    general_solution = sp.exp(p * x) * (c1 * sp.cos(q * x) + c2 * sp.sin(q * x))
+    print("General solution (D < 0):")
+    sp.pprint(general_solution)
+
+# 特性方程式の解の出力 / Display characteristic equation solutions
+print("Characteristic equation solutions:")
+sp.pprint(λ_solutions)
