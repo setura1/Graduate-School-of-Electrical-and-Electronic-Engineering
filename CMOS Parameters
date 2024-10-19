@@ -1,0 +1,27 @@
+import numpy as np
+
+# パラメータ設定 / Set parameters
+V_eff_initial = 0.2  # 初期 V_eff (V) / Initial V_eff (V)
+I_DC_initial = 0.001  # 初期ドレイン電流 I_DC (A) / Initial drain current I_DC (A)
+I_DS = 0.004  # ドレイン電流 I_DS (A) / Drain current I_DS (A)
+V_th = 0.3  # 閾値電圧 V_th (V) / Threshold voltage V_th (V)
+V_DD = 5  # 電源電圧 V_DD (V) / Supply voltage V_DD (V)
+V_out = 2  # 出力電圧 V_out (V) / Output voltage V_out (V)
+
+# 定数 K の計算 / Calculate constant K
+K = I_DC_initial / V_eff_initial**2
+
+# V_eff の計算 / Calculate V_eff
+V_eff = np.sqrt(I_DS / K)
+
+# V_GS の計算 / Calculate V_GS
+V_GS = V_eff + V_th
+
+# 抵抗 R の計算 / Calculate resistance R
+R = (V_DD - V_out) / I_DS
+
+# 結果を表示 / Display results
+print(f"K = {K:.3f}")
+print(f"V_eff = {V_eff:.3f} V")
+print(f"V_GS = {V_GS:.3f} V")
+print(f"R = {R:.1f} Ohms")
