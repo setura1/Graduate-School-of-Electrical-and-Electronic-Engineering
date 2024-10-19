@@ -1,0 +1,33 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# パラメータ設定 / Set parameters
+E = 10  # 電圧 E (V) / Voltage E (V)
+R1 = 1e3  # 抵抗 R1 (オーム) / Resistance R1 (ohms)
+R2 = 500  # 抵抗 R2 (オーム) / Resistance R2 (ohms)
+L = 1e-3  # インダクタンス L (ヘンリー) / Inductance L (henries)
+
+# 時間範囲の設定 / Define the time range
+t = np.linspace(0, 0.01, 1000)  # 0秒から0.01秒までの範囲 / Time range from 0 to 0.01 seconds
+
+# i1(t) の計算 / Calculate i1(t)
+i1_t = (E / R1) * (1 - np.exp(-R1 * R2 * t / (L * (R1 + R2))))
+
+# i2(t) の計算 / Calculate i2(t)
+i2_t = (E / (R1 + R2)) * np.exp(-R1 * R2 * t / (L * (R1 + R2)))
+
+# i1(t) のプロット / Plot i1(t)
+plt.figure(figsize=(10, 6))
+plt.plot(t, i1_t, label=r'$i_1(t)$', color='b')
+
+# i2(t) のプロット / Plot i2(t)
+plt.plot(t, i2_t, label=r'$i_2(t)$', color='r')
+
+plt.title('Plot of $i_1(t)$ and $i_2(t)$')
+plt.xlabel('Time (s)')
+plt.ylabel('Current (A)')
+plt.grid(True)
+plt.legend()
+
+plt.tight_layout()
+plt.show()
