@@ -1,0 +1,18 @@
+import sympy as sp
+
+# Define the symbols for the probabilities
+p0, p1, p2 = sp.symbols('p0 p1 p2')
+
+# Define the expressions based on the equations
+p_Y = p0 + p1 - 2 * p0 * p1
+p_Z = p0 + p1 + p2 - 2 * (p0 * p1 + p0 * p2 + p1 * p2) + 4 * p0 * p1 * p2
+p_Z_given_Y = (p0 + p1 - 2 * p0 * p1) * (1 - p2)
+
+# Conditional probability
+p_conditional = p_Z_given_Y / p_Z
+
+# Simplify the expression
+p_conditional_simplified = sp.simplify(p_conditional)
+
+# Output the result
+p_conditional_simplified
