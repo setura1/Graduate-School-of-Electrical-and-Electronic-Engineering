@@ -1,0 +1,25 @@
+import numpy as np
+
+# パラメータの設定 / Set parameters
+L1 = 1e-3  # インダクタンス L1 (ヘンリー) / Inductance L1 (H)
+L2 = 1e-3  # インダクタンス L2 (ヘンリー) / Inductance L2 (H)
+M = 0.5e-3  # 相互インダクタンス M (ヘンリー) / Mutual inductance M (H)
+Z_A = 100  # インピーダンス ZA (オーム) / Impedance ZA (Ohms)
+Z_B = 200  # インピーダンス ZB (オーム) / Impedance ZB (Ohms)
+Z_C = 300  # インピーダンス ZC (オーム) / Impedance ZC (Ohms)
+omega = 1e3  # 角周波数 ω / Angular frequency ω (rad/s)
+
+# 行列の定義 / Define matrices
+A = np.array([[Z_A + 1j * omega * L1, -1j * omega * M, 0],
+              [-1j * omega * M, Z_B + 1j * omega * L2, -1j * omega * (L2 - M)],
+              [0, -1j * omega * (L2 - M), Z_C + 1j * omega * (L1 - M)]])
+
+# 電圧のベクトル / Voltage vector
+V = np.array([1, 0, 0])  # V1 applied, V2 = V3 = 0 for the calculation
+
+# 電流のベクトルを計算 / Calculate current vector
+I = np.linalg.solve(A, V)
+
+# 結果を表示 / Display results
+print("Currents I1, I2, I3 (in amperes):")
+print(I)
