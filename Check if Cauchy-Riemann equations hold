@@ -1,0 +1,53 @@
+import sympy as sp
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 変数 x, y を定義 (実数) / Define symbols for real and imaginary parts
+x, y = sp.symbols('x y', real=True)
+
+# 1. 正則性チェック（コーシー・リーマン方程式）/ Complex Function Regularity (Cauchy-Riemann Equations)
+def check_holomorphy(f):
+    """与えられた複素関数 f が正則かどうかをコーシー・リーマン方程式で確認する関数
+    Check if a complex function f is holomorphic using the Cauchy-Riemann equations."""
+    
+    # 複素関数の実部と虚部を取得 / Extract real and imaginary parts of the complex function
+    u = sp.re(f)  # 実部 / Real part
+    v = sp.im(f)  # 虚部 / Imaginary part
+
+    # コーシー・リーマン方程式を計算 / Calculate the Cauchy-Riemann equations
+    du_dx = sp.diff(u, x)  # u の x による偏微分 / Partial derivative of u with respect to x
+    du_dy = sp.diff(u, y)  # u の y による偏微分 / Partial derivative of u with respect to y
+    dv_dx = sp.diff(v, x)  # v の x による偏微分 / Partial derivative of v with respect to x
+    dv_dy = sp.diff(v, y)  # v の y による偏微分 / Partial derivative of v with respect to y
+
+    # コーシー・リーマン方程式が成立するかどうかを確認 / Check if Cauchy-Riemann equations hold
+    is_holomorphic = sp.simplify(du_dx - dv_dy) == 0 and sp.simplify(du_dy + dv_dx) == 0
+    return is_holomorphic
+
+# 例: f(z) = z^2 の場合 (z = x + iy と置き換え) / Example function: f(z) = z^2 (substitute z = x + iy)
+z = sp.symbols('z')  # 複素数 z / Complex variable z
+f_z = z**2
+f_z = f_z.subs(z, x + sp.I*y)  # z を x + iy に置き換える / Substitute z = x + iy
+
+# 正則性を確認 / Check holomorphy
+is_holomorphic = check_holomorphy(f_z)
+print("この関数は正則か?:", is_holomorphic)  # 結果表示 / Display result
+
+# 2. 複素関数の微分と調和関数のプロット / Complex Differentiation and Plotting Harmonic Function
+# 調和関数（例：x^2 - y^2）を定義 / Define a harmonic function (e.g., x^2 - y^2)
+harmonic_function = x**2 - y**2
+
+# 調和関数のプロットの準備 / Prepare for plotting the harmonic function
+x_vals = np.linspace(-5, 5, 400)
+y_vals = np.linspace(-5, 5, 400)
+X, Y = np.meshgrid(x_vals, y_vals)
+Z = X**2 - Y**2
+
+# 調和関数のプロット / Plotting the harmonic function
+plt.figure(figsize=(6, 5))
+plt.contourf(X, Y, Z, 50, cmap='RdGy')  # 調和関数の等高線を表示 / Display contour of harmonic function
+plt.colorbar()  # カラーバーを追加 / Add color bar
+plt.title('調和関数: $x^2 - y^2$')  # タイトル / Title
+plt.xlabel('x')  # x 軸ラベル / x-axis label
+plt.ylabel('y')  # y 軸ラベル / y-axis label
+plt.show()  # グラフを表示 / Display the plot
