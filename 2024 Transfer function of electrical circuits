@@ -1,0 +1,52 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import signal
+
+# パラメータの設定 / Set parameters
+R = 1e3  # 抵抗 (R) in ohms / Resistance (ohms)
+L = 1e-3  # インダクタンス (L) in henries / Inductance (H)
+C = 1e-6  # キャパシタンス (C) in farads / Capacitance (F)
+
+# s平面の伝達関数 H(s) / Transfer function H(s)
+num = [R, 0]  # 分子 / Numerator (RCs)
+den = [L, R, 1]  # 分母 / Denominator (LCs^2 + RCs + 1)
+
+# 伝達関数を定義 / Define the transfer function
+system = signal.TransferFunction(num, den)
+
+# 周波数範囲の定義 / Define the frequency range for Bode plot
+frequencies = np.logspace(1, 6, 1000)  # 10Hz to 1MHz
+w, mag, phase = signal.bode(system, w=frequencies)
+
+# ボード線図のプロット / Plot the Bode plot
+plt.figure(figsize=(10, 8))
+
+# 振幅プロット / Magnitude plot
+plt.subplot(2, 1, 1)
+plt.semilogx(w, mag)  # 周波数対数軸 / Frequency on log scale
+plt.title('Bode Plot: Magnitude and Phase')
+plt.ylabel('Magnitude (dB)')
+plt.grid(True, which='both', axis='both')
+
+# 位相プロット / Phase plot
+plt.subplot(2, 1, 2)
+plt.semilogx(w, phase)  # 位相プロット / Phase plot
+plt.xlabel('Frequency (Hz)')
+plt.ylabel('Phase (degrees)')
+plt.grid(True, which='both', axis='both')
+
+# プロットの表示 / Show the plots
+plt.tight_layout()
+plt.show()
+
+# ステップ応答の計算 / Calculate the step response
+t, step_response = signal.step(system)
+
+# ステップ応答のプロット / Plot step response
+plt.figure(figsize=(8, 4))
+plt.plot(t, step_response)
+plt.title("Step Response of RLC Circuit")
+plt.xlabel("Time (s)")
+plt.ylabel("V_out(t)")
+plt.grid(True)
+plt.show()
