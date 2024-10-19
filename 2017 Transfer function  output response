@@ -1,0 +1,39 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import signal
+
+# パラメータの設定 / Set parameters
+R = 1e3  # 抵抗 R (オーム) / Resistance (ohms)
+L = 1e-3  # インダクタンス L (ヘンリー) / Inductance (henries)
+omega = np.logspace(1, 6, 1000)  # 角周波数範囲 / Angular frequency range (rad/s)
+
+# インピーダンス計算 / Calculate Impedances
+Z_load = R + 1j * omega * L  # Z = R + jωL
+Z_source = 1 / (1j * omega * L)  # Z = 1 / (jωL)
+
+# 最大電力供給条件の R_L の計算 / Calculate R_L for maximum power transfer
+RL = (R + 1j * omega * L) / (1j * omega * L) / (R + 1j * omega * L + 1 / (1j * omega * L))
+
+# 振幅と位相の計算 / Calculate magnitude and phase
+RL_magnitude = 20 * np.log10(np.abs(RL))
+RL_phase = np.angle(RL, deg=True)
+
+# ボード線図のプロット / Plot Bode plot
+plt.figure(figsize=(10, 8))
+
+# 振幅応答のプロット / Magnitude plot
+plt.subplot(2, 1, 1)
+plt.semilogx(omega, RL_magnitude, color='b')
+plt.title('Bode Plot: Magnitude and Phase of $R_L$')
+plt.ylabel('Magnitude (dB)')
+plt.grid(True, which='both', axis='both')
+
+# 位相応答のプロット / Phase plot
+plt.subplot(2, 1, 2)
+plt.semilogx(omega, RL_phase, color='r')
+plt.xlabel('Frequency (rad/s)')
+plt.ylabel('Phase (degrees)')
+plt.grid(True, which='both', axis='both')
+
+plt.tight_layout()
+plt.show()
