@@ -1,0 +1,24 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# パラメータの設定 / Set parameters
+I1 = 1  # I1の振幅 / Amplitude of I1
+I3 = 0.5  # I3の振幅 / Amplitude of I3
+omega = 2 * np.pi  # 角周波数 (ω) / Angular frequency
+
+# 時間の範囲を設定 / Define the time range
+t = np.linspace(0, 2, 1000)  # 0から2秒までを1000点で計算 / From 0 to 2 seconds with 1000 points
+
+# i(t)^2 の式 / Define i(t)^2
+i_t_squared = I1**2 * (1 - np.cos(2 * omega * t)) + I3**2 * (1 - np.cos(6 * omega * t)) \
+              + 2 * I1 * I3 * (np.cos(2 * omega * t) - np.cos(4 * omega * t))
+
+# プロット / Plot the result
+plt.figure(figsize=(8, 6))
+plt.plot(t, i_t_squared, label=r'$i(t)^2$', color='b')
+plt.title(r'Plot of $i(t)^2$')
+plt.xlabel('Time (t)')
+plt.ylabel(r'$i(t)^2$')
+plt.grid(True)
+plt.legend()
+plt.show()
