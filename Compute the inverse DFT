@@ -1,0 +1,18 @@
+import numpy as np
+
+# 信号の定義 / Define the signal
+f = np.array([4, 4 + 1j * 2, 0, 4 - 1j * 2])  # f(0), f(1), f(2), f(3)
+
+# 離散フーリエ変換の計算 / Compute the DFT
+F = np.fft.fft(f)
+print("DFT of the signal f(n):")
+print(F)
+
+# 逆離散フーリエ変換の計算 / Compute the inverse DFT
+g = np.fft.ifft(F)
+print("\nInverse DFT of F(k):")
+print(g)
+
+# 検証のための結果 / Verify the results
+print("\nOriginal signal (f(n)) recovered from inverse DFT:")
+print(np.round(g, decimals=6))  # 元の信号に近い値が得られるか確認
