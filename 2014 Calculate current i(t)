@@ -1,0 +1,29 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# パラメータの設定 / Set parameters
+A = 1  # 定数 A / Constant A
+B = 1  # 定数 B / Constant B
+C1 = 1e-6  # キャパシタンス C1 (ファラッド) / Capacitance C1 (Farads)
+C2 = 2e-6  # キャパシタンス C2 (ファラッド) / Capacitance C2 (Farads)
+L = 1e-3  # インダクタンス L (ヘンリー) / Inductance L (Henry)
+
+# 角周波数の計算 / Calculate angular frequency
+omega = np.sqrt((C1 + C2) / (L * C1 * C2))
+
+# 時間範囲の設定 / Define the time range
+t = np.linspace(0, 0.01, 1000)  # 0秒から0.01秒の範囲 / Time range from 0 to 0.01 seconds
+
+# 電流 i(t) の計算 / Calculate current i(t)
+i_t = A * np.cos(omega * t) + B * np.sin(omega * t)
+
+# 電流 i(t) のプロット / Plot i(t)
+plt.figure(figsize=(10, 6))
+plt.plot(t, i_t, label=r'$i(t)$', color='b')
+plt.title(r'Plot of $i(t) = A \cos(\omega t) + B \sin(\omega t)$')
+plt.xlabel('Time (s)')
+plt.ylabel('Current i(t) (A)')
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
+plt.show()
