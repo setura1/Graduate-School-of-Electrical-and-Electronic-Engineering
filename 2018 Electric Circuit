@@ -1,0 +1,53 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import signal
+
+# パラメータの設定 / Set parameters
+R = 1e3  # 抵抗 R (オーム) / Resistance (ohms)
+C = 1e-6  # キャパシタ C (ファラッド) / Capacitance (F)
+Z = 500  # 並列部のインピーダンス Z (オーム) / Impedance of parallel part (ohms)
+E0 = 5  # 入力電圧の振幅 / Amplitude of input voltage
+
+# 角周波数の範囲 / Angular frequency range
+frequencies = np.logspace(1, 6, 1000)  # 10Hz to 1MHz
+omega = 2 * np.pi * frequencies  # 周波数から角周波数へ変換 / Convert frequency to angular frequency
+
+# インピーダンス Z の式 / Define impedance Z equation
+Z_total = R + 1 / (1j * omega * C) + Z
+
+# 伝達関数の定義 / Transfer function
+H = 1 / Z_total
+
+# サイン波入力の設定 / Define input sine wave
+t = np.linspace(0, 0.01, 1000)  # 時間範囲 / Time range (0 to 0.01 seconds)
+f_input = 2000  # 入力信号の周波数 2 kHz / Frequency of input signal (2 kHz)
+input_signal = E0 * np.sin(2 * np.pi * f_input * t)  # サイン波入力 / Sine wave input
+
+# システムのインパルス応答を計算 (伝達関数 H を時間領域に変換) / Calculate the impulse response of the system
+num = [1]
+den = [R * C, R, 1]
+system = signal.TransferFunction(num, den)
+t_impulse, impulse_response = signal.impulse(system, T=t)
+
+# サイン波入力とインパルス応答の畳み込み / Convolve input signal with the system's impulse response
+output_signal = np.convolve(input_signal, impulse_response, mode='same') * (t[1] - t[0])
+
+# サイン波入力のプロット / Plot the input sine wave
+plt.figure(figsize=(10, 4))
+plt.plot(t, input_signal, label='Input Sine Wave', color='b')
+plt.title('Input Sine Wave')
+plt.xlabel('Time (s)')
+plt.ylabel('Amplitude')
+plt.grid(True)
+plt.legend()
+plt.show()
+
+# 出力信号のプロット / Plot the output signal (convolved)
+plt.figure(figsize=(10, 4))
+plt.plot(t, output_signal, label='Output Signal (Convolved)', color='r')
+plt.title('Output Signal After Convolution')
+plt.xlabel('Time (s)')
+plt.ylabel('Amplitude')
+plt.grid(True)
+plt.legend()
+plt.show()
