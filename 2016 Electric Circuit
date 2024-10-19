@@ -1,0 +1,38 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# パラメータの設定 / Set parameters
+E0 = 10  # 初期電圧 E0 (V) / Initial voltage E0 (V)
+R = 1e3  # 抵抗 R (オーム) / Resistance (ohms)
+L = 1e-3  # インダクタンス L (ヘンリー) / Inductance (H)
+I0 = 5  # 初期電流 I0 (A) / Initial current I0 (A)
+
+# 時間範囲の設定 / Define the time range
+t = np.linspace(0, 0.01, 1000)  # 0から0.01秒の範囲 / Time range from 0 to 0.01 seconds
+
+# 電流 i(t) の計算 / Calculate i(t)
+i_t = (E0 + R * I0) / (2 * R) * (1 - np.exp(-2 * R * t / L))
+
+# 電圧 v(t) の計算 / Calculate v(t)
+v_t = (E0 + R * I0) / 2 * (1 + np.exp(-2 * R * t / L))
+
+# 電流 i(t) のプロット / Plot i(t)
+plt.figure(figsize=(10, 6))
+plt.subplot(2, 1, 1)
+plt.plot(t, i_t, label=r'$i(t)$', color='b')
+plt.title(r'Plot of $i(t)$ and $v(t)$')
+plt.xlabel('Time (s)')
+plt.ylabel(r'$i(t)$ (A)')
+plt.grid(True)
+plt.legend()
+
+# 電圧 v(t) のプロット / Plot v(t)
+plt.subplot(2, 1, 2)
+plt.plot(t, v_t, label=r'$v(t)$', color='r')
+plt.xlabel('Time (s)')
+plt.ylabel(r'$v(t)$ (V)')
+plt.grid(True)
+plt.legend()
+
+plt.tight_layout()
+plt.show()
