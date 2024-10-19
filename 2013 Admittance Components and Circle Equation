@@ -1,0 +1,33 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# パラメータ設定 / Set parameters
+R = 1e3  # 抵抗 R (オーム) / Resistance (ohms)
+L = 1e-3  # インダクタンス L (ヘンリー) / Inductance (henries)
+omega = np.logspace(3, 6, 1000)  # 角周波数 ω / Angular frequency ω (rad/s)
+
+# 合成アドミタンスの実部 x と虚部 y の計算 / Calculate real part (x) and imaginary part (y) of the admittance
+x = R / (R**2 + (omega * L)**2)
+y = omega * L / (R**2 + (omega * L)**2)
+
+# y の計算式に基づく理論的な y の値 / Calculate theoretical y based on the given formula
+y_theoretical = np.sqrt(R / x - R**2)
+
+# x, y の円方程式の検証 / Verify the circle equation
+circle_eq = (x - 1/(2*R))**2 + y**2
+
+# プロット / Plot the results
+plt.figure(figsize=(10, 6))
+
+# x と y のプロット / Plot x and y
+plt.plot(x, y, label='y vs x', color='b')
+
+# 円のプロット / Plot circle equation
+plt.plot(x, circle_eq, label=r'$(x - 1/(2R))^2 + y^2$', linestyle='--', color='r')
+
+plt.title('Admittance Components and Circle Equation')
+plt.xlabel('x (Real Part)')
+plt.ylabel('y (Imaginary Part)')
+plt.legend()
+plt.grid(True)
+plt.show()
