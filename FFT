@@ -1,0 +1,82 @@
+import numpy as np
+
+# 1. Discrete Fourier Transform (DFT) using matrix representation
+def DFT_matrix(N):
+    """Create the DFT matrix for N-point DFT"""
+    n = np.arange(N)
+    k = n.reshape((N, 1))
+    W = np.exp(-2j * np.pi * k * n / N)
+    return W
+
+# 2. Cooley-Tukey FFT algorithm
+def FFT(x):
+    """Recursive FFT algorithm (Cooley-Tukey)"""
+    N = len(x)
+    if N <= 1:
+        return x
+    even = FFT(x[0::2])
+    odd = FFT(x[1::2])
+    T = [np.exp(-2j * np.pi * k / N) * odd[k] for k in range(N // 2)]
+    return [even[k] + T[k] for k in range(N // 2)] + \
+           [even[k] - T[k] for k in range(N // 2)]
+
+# 3. Butterfly operation for 2-point DFT
+def butterfly(x):
+    """Performs a butterfly operation on a 2-point DFT."""
+    W = np.array([[1, 1], [1, -1]])
+    return np.dot(W, x)
+
+# 4. Bit-reversal function for FFT ordering
+def bit_reversal(x):
+    """Reverses the bits of the input indices for FFT."""
+    N = len(x)
+    result = np.zeros(N, dtype=complex)
+    for i in range(N):
+        rev_index = int('{:0{width}b}'.format(i, width=int(np.log2(N)))[::-1], 2)
+        result[rev_index] = x[i]
+    return result
+
+# 5. FFT algorithm with bit-reversal
+def FFT_with_bit_reversal(x):
+    """Performs FFT with bit-reversal ordering and butterfly operations."""
+    N = len(x)
+    x = bit_reversal(x)
+    
+    step = 2
+    while step <= N:
+        half_step = step // 2
+        W_m = np.exp(-2j * np.pi * np.arange(half_step) / step)
+        
+        for i in range(0, N, step):
+            for j in range(half_step):
+                u = x[i + j]
+                t = W_m[j] * x[i + j + half_step]
+                x[i + j] = u + t
+                x[i + j + half_step] = u - t
+        step *= 2
+    return x
+
+# 6. Example usage and testing the functions
+
+# Example input signal
+x = np.array([1, 2, 3, 4], dtype=complex)
+
+# DFT Matrix Representation
+N = len(x)
+dft_matrix = DFT_matrix(N)
+dft_result = np.dot(dft_matrix, x)
+print("DFT Result using Matrix Representation:\n", dft_result)
+
+# FFT using Recursive Cooley-Tukey Algorithm
+fft_result_recursive = FFT(x)
+print("\nFFT Result (Recursive):\n", fft_result_recursive)
+
+# Butterfly Operation (for a simple 2-point DFT)
+x_2points = np.array([1, 2])
+butterfly_result = butterfly(x_2points)
+print("\nButterfly Operation Result for 2-point DFT:\n", butterfly_result)
+
+# FFT with Bit-Reversal and Butterfly
+x = np.array([1, 2, 3, 4, 5, 6, 7, 8], dtype=complex)
+fft_result_bit_reversal = FFT_with_bit_reversal(x)
+print("\nFFT with Bit Reversal and Butterfly:\n", fft_result_bit_reversal)
