@@ -1,0 +1,47 @@
+import sympy as sp
+
+# シンボリック変数の定義
+ω, ω0, t = sp.symbols('omega omega0 t', real=True)
+f = sp.Function('f')(t)
+
+# (1) フーリエ変換の性質
+R = sp.Function('R')(ω)
+X = sp.Function('X')(ω)
+F = R + sp.I * X  # フーリエ変換 F(ω) を R(ω) と X(ω) で表現
+
+# 大きさと位相の計算
+magnitude = sp.sqrt(R**2 + X**2)
+phase = sp.atan2(X, R)
+print("Magnitude:")
+sp.pprint(magnitude)
+print("Phase:")
+sp.pprint(phase)
+
+# (2) フーリエ変換のスケーリング性
+a = sp.symbols('a')
+F_ω = sp.fourier_transform(f, t, ω)
+G_ω_scaled = a * F_ω
+print("\nScaled Fourier Transform:")
+sp.pprint(G_ω_scaled)
+
+# (3) 時間シフトによるフーリエ変換
+t0 = sp.symbols('t0', real=True)
+F_shifted = sp.fourier_transform(f.subs(t, t - t0), t, ω)
+print("\nTime-shifted Fourier Transform:")
+sp.pprint(F_shifted)
+
+# (4) 微分によるフーリエ変換
+f_diff = sp.diff(f, t)
+F_derivative = sp.fourier_transform(f_diff, t, ω)
+print("\nFourier Transform of the derivative:")
+sp.pprint(F_derivative)
+
+# (6) シフトによるフーリエ変換
+F_shifted_omega = sp.fourier_transform(f * sp.exp(sp.I * ω0 * t), t, ω)
+print("\nFrequency-shifted Fourier Transform:")
+sp.pprint(F_shifted_omega)
+
+# 加算されたフーリエ変換
+F_combined = (F_ω.subs(ω, ω - ω0) + F_ω.subs(ω, ω + ω0)) / 2
+print("\nCombined Fourier Transform:")
+sp.pprint(F_combined)
