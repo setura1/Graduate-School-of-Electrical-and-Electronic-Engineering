@@ -1,0 +1,20 @@
+import sympy as sp
+
+# 1. 定義する変数 / Define variables
+z = sp.symbols('z', complex=True)
+
+# 2. 関数 f(z) の定義 / Define the function f(z)
+f_z = (2*z) / (z**2 + 2)
+
+# 3. f(z) の極を計算 / Calculate the poles of f(z)
+poles = sp.solve(z**2 + 2, z)
+print("極 / Poles of f(z):", poles)
+
+# 4. 各極での留数を計算 / Calculate the residues at the poles
+residues = [sp.residue(f_z, z, pole) for pole in poles]
+print("\n留数 / Residues at the poles:", residues)
+
+# 5. 留数定理を適用して積分を計算 / Apply the residue theorem to compute the integral
+integral = 2 * sp.pi * sp.I * sum(residues)
+print("\n積分の結果 / Result of the contour integral:")
+sp.pprint(integral)
