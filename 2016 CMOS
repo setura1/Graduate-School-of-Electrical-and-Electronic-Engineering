@@ -1,0 +1,64 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# パラメータの設定 / Set parameters
+R = 1e3  # 抵抗 R (オーム) / Resistance (ohms)
+L = 1e-3  # インダクタンス L (ヘンリー) / Inductance (henries)
+C = 1e-6  # キャパシタンス C (ファラッド) / Capacitance (farads)
+gm = 1e-3  # トランスコンダクタンス g_m (シーメンス) / Transconductance g_m (Siemens)
+
+# 角周波数範囲の設定 / Define the angular frequency range
+omega = np.logspace(1, 6, 1000)  # 10Hzから1MHzまで / From 10Hz to 1MHz
+jw = 1j * omega  # jω
+
+# ゲイン A1(jω) の計算 / Calculate the gain A1(jω)
+A1 = -gm / (1 / (R + jw * L) + jw * C)
+
+# ゲイン A2(jω) の計算 / Calculate the gain A2(jω)
+A2 = A1**2
+
+# 振幅と位相の計算 / Calculate magnitude and phase
+A1_magnitude = 20 * np.log10(np.abs(A1))
+A1_phase = np.angle(A1, deg=True)
+
+A2_magnitude = 20 * np.log10(np.abs(A2))
+A2_phase = np.angle(A2, deg=True)
+
+# ボード線図のプロット / Plot Bode plot
+plt.figure(figsize=(10, 8))
+
+# A1(jω)の振幅応答のプロット / Magnitude plot for A1(jω)
+plt.subplot(2, 1, 1)
+plt.semilogx(omega, A1_magnitude, label=r'$A_1(j\omega)$ Magnitude', color='b')
+plt.title('Bode Plot: $A_1(j\omega)$ and $A_2(j\omega)$')
+plt.ylabel('Magnitude (dB)')
+plt.grid(True, which='both', axis='both')
+
+# A1(jω)の位相応答のプロット / Phase plot for A1(jω)
+plt.subplot(2, 1, 2)
+plt.semilogx(omega, A1_phase, label=r'$A_1(j\omega)$ Phase', color='r')
+plt.xlabel('Frequency (rad/s)')
+plt.ylabel('Phase (degrees)')
+plt.grid(True, which='both', axis='both')
+
+plt.tight_layout()
+plt.show()
+
+# A2(jω)の振幅応答のプロット / Magnitude plot for A2(jω)
+plt.figure(figsize=(10, 8))
+
+plt.subplot(2, 1, 1)
+plt.semilogx(omega, A2_magnitude, label=r'$A_2(j\omega)$ Magnitude', color='b')
+plt.title('Bode Plot: $A_2(j\omega)$')
+plt.ylabel('Magnitude (dB)')
+plt.grid(True, which='both', axis='both')
+
+# A2(jω)の位相応答のプロット / Phase plot for A2(jω)
+plt.subplot(2, 1, 2)
+plt.semilogx(omega, A2_phase, label=r'$A_2(j\omega)$ Phase', color='r')
+plt.xlabel('Frequency (rad/s)')
+plt.ylabel('Phase (degrees)')
+plt.grid(True, which='both', axis='both')
+
+plt.tight_layout()
+plt.show()
