@@ -1,0 +1,35 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# パラメータ設定 / Set parameters
+T = 1  # 周期 T (s) / Time period T (seconds)
+t = np.linspace(-T/2, T/2, 1000)  # 時間範囲 / Time range
+
+# 入力電圧 V1(t) の計算 / Calculate input voltage V1(t)
+V1 = np.piecewise(t, [t < 0, t >= 0],
+                  [lambda t: 4 * t + 0.1, 
+                   lambda t: -4 * t + 0.1])
+
+# 出力電圧 V(t) の計算 / Calculate output voltage V(t)
+V_out = np.piecewise(t, [t < 0, t >= 0], 
+                     [-64e-3, 64e-3])
+
+# 入力電圧 V1(t) のプロット / Plot input voltage V1(t)
+plt.figure(figsize=(10, 6))
+plt.subplot(2, 1, 1)
+plt.plot(t, V1, label=r'$V_1(t)$', color='b')
+plt.title('Input and Output Voltages')
+plt.ylabel('Input Voltage $V_1(t)$ (V)')
+plt.grid(True)
+plt.legend()
+
+# 出力電圧 V(t) のプロット / Plot output voltage V(t)
+plt.subplot(2, 1, 2)
+plt.plot(t, V_out, label=r'$V(t)$', color='r')
+plt.xlabel('Time (s)')
+plt.ylabel('Output Voltage $V(t)$ (V)')
+plt.grid(True)
+plt.legend()
+
+plt.tight_layout()
+plt.show()
