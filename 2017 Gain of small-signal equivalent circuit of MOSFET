@@ -1,0 +1,36 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# パラメータの設定 / Set parameters
+R1 = 1e3  # R1の抵抗値 (オーム) / Resistance R1 (ohms)
+R2 = 2e3  # R2の抵抗値 (オーム) / Resistance R2 (ohms)
+RD = 1e3  # RDの抵抗値 (オーム) / Resistance RD (ohms)
+C = 1e-6  # キャパシタ C (ファラッド) / Capacitance C (farads)
+gm = 1e-3  # トランスコンダクタンス g_m (シーメンス) / Transconductance g_m (Siemens)
+
+# 角周波数範囲の設定 / Define the angular frequency range
+omega = np.logspace(1, 6, 1000)  # 10Hzから1MHzまで / From 10Hz to 1MHz
+jw = 1j * omega  # jω
+
+# 伝達関数 G(jω) の計算 / Calculate the transfer function G(jω)
+numerator = jw * C * R1 * R2 * RD * gm
+denominator = R1 + R2 + jw * R1 * R2 * C
+G = numerator / denominator
+
+# 振幅と位相の計算 / Calculate magnitude and phase
+G_magnitude = 20 * np.log10(np.abs(G))
+G_phase = np.angle(G, deg=True)
+
+# ボード線図のプロット / Plot Bode plot
+plt.figure(figsize=(10, 8))
+
+# 振幅応答のプロット / Magnitude plot
+plt.subplot(2, 1, 1)
+plt.semilogx(omega, G_magnitude, color='b')
+plt.title('Bode Plot: Magnitude and Phase of $G(j\omega)$')
+plt.ylabel('Magnitude (dB)')
+plt.grid(True, which='both', axis='both')
+
+# 位相応答のプロット / Phase plot
+plt.subplot(2, 1, 2)
+plt.semilogx(
