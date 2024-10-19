@@ -1,0 +1,17 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# パラメータの設定 / Set parameters
+Ts = 1  # サンプリング周期 / Sampling period
+
+# 離散フーリエ変換の係数を計算 / Calculate DFT coefficients
+n_values = np.arange(-10, 11)  # nの範囲 / Range of n
+c_n = (1 / Ts) * np.exp(1j * 2 * np.pi * n_values)
+
+# 結果をプロット / Plot the results
+plt.stem(n_values, np.abs(c_n), use_line_collection=True)
+plt.title('DFT Coefficients Magnitude')
+plt.xlabel('n')
+plt.ylabel('|c_n|')
+plt.grid(True)
+plt.show()
