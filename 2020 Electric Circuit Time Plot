@@ -1,0 +1,27 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# パラメータの設定 / Set parameters
+V = 5  # 電圧 V / Voltage (V)
+R = 1e3  # 抵抗 R (オーム) / Resistance (ohms)
+C = 1e-6  # キャパシタ C (ファラッド) / Capacitance (farads)
+a = 0.002  # 時間 a (秒) / Time (s)
+
+# 時間の範囲を設定 / Define the time range
+t = np.linspace(0, 0.01, 1000)  # 0秒から0.01秒まで / From 0 to 0.01 seconds
+
+# \( v_c(t) \) の定義 / Define v_c(t)
+v_c = np.piecewise(t, 
+                   [t <= a, t > a],
+                   [lambda t: 2 * V * (1 - np.exp(-t / (R * C))),
+                    lambda t: V * (1 + (np.exp(a / (R * C)) - 2) * np.exp(-t / (R * C)))])
+
+# プロット / Plot the result
+plt.figure(figsize=(8, 6))
+plt.plot(t, v_c, label=r'$v_c(t)$', color='b')
+plt.title(r'Plot of $v_c(t)$')
+plt.xlabel('Time (t)')
+plt.ylabel(r'$v_c(t)$ (V)')
+plt.grid(True)
+plt.legend()
+plt.show()
