@@ -1,0 +1,40 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# パラメータ設定 / Set parameters
+gm = 1e-3  # トランスコンダクタンス g_m (S) / Transconductance (Siemens)
+G1 = 1e-3  # G1 (S) / Conductance G1 (Siemens)
+G2 = 2e-3  # G2 (S) / Conductance G2 (Siemens)
+G3 = 1e-3  # G3 (S) / Conductance G3 (Siemens)
+Cgs = 1e-12  # キャパシタンス Cgs (F) / Capacitance Cgs (Farads)
+R1 = 1e3  # 抵抗 R1 (オーム) / Resistance R1 (Ohms)
+R2 = 2e3  # 抵抗 R2 (オーム) / Resistance R2 (Ohms)
+
+# 角周波数範囲 / Frequency range
+omega = np.logspace(1, 7, 1000)  # 10^1 から 10^7 (rad/s) / From 10^1 to 10^7 rad/s
+
+# 左の回路の電圧利得 A_v の計算 / Calculate Av for the left circuit
+Av = (gm * G2) / (G2**2 - (G1 + G2) * (G2 + G3))
+
+# 右の回路の伝達関数 G(jω) の計算 / Calculate G(jω) for the right circuit
+Gjw = (R2 * gm) / (1 + 1j * omega * Cgs * R1)
+
+# ボード線図のプロット / Plot Bode plots
+plt.figure(figsize=(10, 8))
+
+# 左回路の振幅応答 (A_v) / Magnitude response for the left circuit (Av)
+plt.subplot(2, 1, 1)
+plt.semilogx(omega, 20 * np.log10(abs(Av)), label='Left Circuit: $A_v$', color='b')
+plt.title('Bode Plot for Left and Right Circuits')
+plt.ylabel('Gain (dB)')
+plt.grid(True, which='both', linestyle='--')
+
+# 右回路の振幅応答 (G(jω)) / Magnitude response for the right circuit (G(jω))
+plt.subplot(2, 1, 2)
+plt.semilogx(omega, 20 * np.log10(abs(Gjw)), label='Right Circuit: $G(j\\omega)$', color='r')
+plt.xlabel('Frequency (rad/s)')
+plt.ylabel('Gain (dB)')
+plt.grid(True, which='both', linestyle='--')
+
+plt.tight_layout()
+plt.show()
