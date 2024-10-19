@@ -1,0 +1,23 @@
+import sympy as sp
+
+# シンボリック変数の定義 / Define symbolic variables
+t, ω = sp.symbols('t omega', real=True)
+f = sp.Function('f')(t)
+
+# f(t) の1階微分のフーリエ変換 / Fourier transform of the first derivative
+f_diff_1 = sp.diff(f, t)
+H_ω = sp.fourier_transform(f_diff_1, t, ω)
+print("H(ω) (First derivative Fourier transform):")
+sp.pprint(H_ω)
+
+# f(t) の2階微分のフーリエ変換 / Fourier transform of the second derivative
+f_diff_2 = sp.diff(f, t, t)
+G_ω = sp.fourier_transform(f_diff_2, t, ω)
+print("\nG(ω) (Second derivative Fourier transform):")
+sp.pprint(G_ω)
+
+# -ω^2 * F(ω) の結果を表示 / Display -ω^2 * F(ω)
+F_ω = sp.fourier_transform(f, t, ω)
+result = -ω**2 * F_ω
+print("\n-ω^2 * F(ω):")
+sp.pprint(result)
