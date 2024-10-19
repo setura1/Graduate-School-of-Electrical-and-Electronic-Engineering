@@ -1,0 +1,55 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import signal
+
+# パラメータの設定 / Set parameters
+E0 = 5  # 入力電圧 (V) / Input voltage (V)
+R = 1e3  # 抵抗 R (オーム) / Resistance R (ohms)
+L = 1e-3  # インダクタンス L (ヘンリー) / Inductance L (henries)
+a = 0.002  # 時定数 a / Time constant (s)
+
+# 時間範囲の設定 / Time range
+t = np.linspace(0, 0.01, 1000)  # 0秒から0.01秒 / From 0 to 0.01 seconds
+
+# v_R(t) の定義 / Define v_R(t)
+u = np.heaviside(t, 1)  # 単位ステップ関数 / Unit step function
+v_R = E0 * (-np.exp(-t / a) + u - (1 - np.exp(-(t - a) / a)) * np.heaviside(t - a, 1))
+
+# v_R(t) のプロット / Plot v_R(t)
+plt.figure(figsize=(8, 6))
+plt.plot(t, v_R, label=r'$v_R(t)$', color='b')
+plt.title(r'Plot of $v_R(t)$')
+plt.xlabel('Time (t)')
+plt.ylabel(r'$v_R(t)$ (V)')
+plt.grid(True)
+plt.legend()
+plt.show()
+
+# 伝達関数 V_R(s) をボード線図でプロット / Transfer function V_R(s) and Bode plot
+num = [E0 * R]
+den = [L, R]
+system = signal.TransferFunction(num, den)
+
+# 周波数範囲の設定 / Define the frequency range for Bode plot
+frequencies = np.logspace(1, 6, 1000)  # 10Hz to 1MHz
+w, mag, phase = signal.bode(system, w=frequencies)
+
+# ボード線図のプロット / Plot Bode plot
+plt.figure(figsize=(10, 8))
+
+# 振幅応答のプロット / Magnitude plot
+plt.subplot(2, 1, 1)
+plt.semilogx(w, mag, color='g')
+plt.title('Bode Plot: Magnitude and Phase')
+plt.ylabel('Magnitude (dB)')
+plt.grid(True, which='both', axis='both')
+
+# 位相応答のプロット / Phase plot
+plt.subplot(2, 1, 2)
+plt.semilogx(w, phase, color='r')
+plt.xlabel('Frequency (Hz)')
+plt.ylabel('Phase (degrees)')
+plt.grid(True, which='both', axis='both')
+
+plt.tight_layout()
+plt.show()
