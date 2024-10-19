@@ -1,0 +1,30 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+# パラメータの設定 / Set parameters
+L = 1.0  # 長さL / Length L
+n = 1    # nの値 / Value of n
+t_values = np.linspace(0, 1, 100)  # 時間範囲 / Time range
+x_values = np.linspace(0, L, 100)  # xの範囲 / Range of x
+
+# f(x)をsin関数として仮定 / Assuming f(x) as a sine function
+def f_x(x):
+    return np.sin(np.pi * x / L)
+
+# 解u(x, t)の計算 / Calculate solution u(x, t)
+X, T = np.meshgrid(x_values, t_values)
+U = f_x(X) * np.exp(-((n * np.pi / L) ** 2) * T)
+
+# プロットの作成 / Create plot
+fig = plt.figure(figsize=(10, 7))
+ax = fig.add_subplot(111, projection='3d')
+
+# 三次元プロット / 3D plot
+ax.plot_surface(X, T, U, cmap='viridis')
+ax.set_xlabel('x')
+ax.set_ylabel('t')
+ax.set_zlabel('u(x, t)')
+ax.set_title('3D plot of the solution u(x, t)')
+
+plt.show()
