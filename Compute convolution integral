@@ -1,0 +1,32 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 定義域の設定 / Set the domain for t
+t = np.linspace(0, 2, 1000)
+
+# f1(t) と f2(t) の定義 / Define f1(t) and f2(t)
+def f1(tau):
+    return np.sin(2 * np.pi * tau)
+
+def f2(t):
+    return np.ones_like(t)  # 1に相当する関数
+
+# 畳み込み積分の計算 / Compute convolution integral
+def convolution(t):
+    result = np.zeros_like(t)
+    for i in range(len(t)):
+        tau = np.linspace(0, t[i], 1000)  # 0からtまでの区間
+        integrand = f1(tau) * f2(t[i] - tau)  # 積分する関数
+        result[i] = np.trapz(integrand, tau)  # 数値積分
+    return result
+
+# 畳み込み結果 / Convolution result
+f_t = convolution(t)
+
+# プロット / Plot the result
+plt.plot(t, f_t)
+plt.title("Convolution Result")
+plt.xlabel("t")
+plt.ylabel("f(t)")
+plt.grid(True)
+plt.show()
