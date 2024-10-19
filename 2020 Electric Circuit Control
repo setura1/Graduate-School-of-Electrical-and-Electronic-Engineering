@@ -1,0 +1,51 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import signal
+
+# パラメータの設定 / Set parameters
+C = 1e-6  # キャパシタ C (ファラッド) / Capacitance C (F)
+R = 1e3   # 抵抗 R (オーム) / Resistance R (ohms)
+C_prime = 0.5e-6  # キャパシタ C' (ファラッド) / Capacitance C' (F)
+R_prime = 500  # 抵抗 R' (オーム) / Resistance R' (ohms)
+
+# 角周波数範囲 / Define the angular frequency range
+frequencies = np.logspace(1, 6, 1000)  # 10Hz to 1MHz
+omega = 2 * np.pi * frequencies  # 周波数から角周波数へ変換 / Convert to angular frequency
+
+# 伝達関数 1 / Transfer function 1: vC/vB = 1 / (1 + jωC'R')
+H1 = 1 / (1 + 1j * omega * C_prime * R_prime)
+
+# 伝達関数 2 / Transfer function 2: vC/vA = (1 + jωCR) / (1 + jωC'R')
+H2 = (1 + 1j * omega * C * R) / (1 + 1j * omega * C_prime * R_prime)
+
+# 振幅と位相の計算 / Calculate magnitude and phase
+H1_magnitude = 20 * np.log10(np.abs(H1))
+H1_phase = np.angle(H1, deg=True)
+
+H2_magnitude = 20 * np.log10(np.abs(H2))
+H2_phase = np.angle(H2, deg=True)
+
+# プロットの設定 / Plotting
+plt.figure(figsize=(10, 8))
+
+# 振幅プロット / Magnitude plot for both transfer functions
+plt.subplot(2, 1, 1)
+plt.semilogx(frequencies, H1_magnitude, label=r'$v_C / v_B$', linestyle='--')
+plt.semilogx(frequencies, H2_magnitude, label=r'$v_C / v_A$', color='red')
+plt.title('Bode Plot: Magnitude Response')
+plt.ylabel('Magnitude (dB)')
+plt.grid(True, which='both', axis='both')
+plt.legend()
+
+# 位相プロット / Phase plot for both transfer functions
+plt.subplot(2, 1, 2)
+plt.semilogx(frequencies, H1_phase, label=r'$v_C / v_B$', linestyle='--')
+plt.semilogx(frequencies, H2_phase, label=r'$v_C / v_A$', color='red')
+plt.title('Bode Plot: Phase Response')
+plt.xlabel('Frequency (Hz)')
+plt.ylabel('Phase (degrees)')
+plt.grid(True, which='both', axis='both')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
