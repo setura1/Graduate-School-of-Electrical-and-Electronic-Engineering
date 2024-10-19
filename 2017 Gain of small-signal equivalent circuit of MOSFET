@@ -33,4 +33,10 @@ plt.grid(True, which='both', axis='both')
 
 # 位相応答のプロット / Phase plot
 plt.subplot(2, 1, 2)
-plt.semilogx(
+plt.semilogx(omega, G_phase, color='r')
+plt.xlabel('Frequency (rad/s)')
+plt.ylabel('Phase (degrees)')
+plt.grid(True, which='both', axis='both')
+
+plt.tight_layout()
+plt.show()
