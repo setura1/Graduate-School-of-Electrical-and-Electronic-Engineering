@@ -1,0 +1,12 @@
+import numpy as np
+
+# パラメータの設定 / Set parameters
+E0 = 5  # 初期電圧 E0 (V) / Initial voltage E0 (V)
+n = 1000  # 十分に大きな n / Large n for limit approximation
+e = np.e  # 自然対数の底 e / Euler's number
+
+# 十分時間が経った時の v_sat の計算 / Calculate v_sat when n -> infinity
+v_sat = (1 / (e + 1)) * E0
+
+# 結果の表示 / Display result
+print(f"v_sat = {v_sat:.4f} V")
