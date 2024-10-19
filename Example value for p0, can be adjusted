@@ -1,0 +1,23 @@
+import numpy as np
+
+# Define the parameters
+p0 = 0.5  # Example value for p0, can be adjusted
+sigma = 1  # Example value for standard deviation (sigma)
+
+# Define the probability density function p(y)
+def p_y(y, p0, sigma):
+    term1 = (p0 / (2 * np.pi * sigma**2)) * np.exp(-((y - 1)**2) / (2 * sigma**2))
+    term2 = ((1 - p0) / (2 * np.pi * sigma**2)) * np.exp(-(y**2) / (2 * sigma**2))
+    return term1 + term2
+
+# Define the function when point X sends "1"
+def p_y_given_x_1(y, p0, sigma):
+    return (p0 / (2 * np.pi * sigma**2)) * np.exp(-((y - 1)**2) / (2 * sigma**2))
+
+# Example: Calculate p(y) for a range of y values
+y_values = np.linspace(-3, 3, 100)
+p_y_values = p_y(y_values, p0, sigma)
+p_y_given_x_1_values = p_y_given_x_1(y_values, p0, sigma)
+
+# Output the first few values for inspection
+p_y_values[:5], p_y_given_x_1_values[:5]
