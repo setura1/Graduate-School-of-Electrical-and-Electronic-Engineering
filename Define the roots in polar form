@@ -1,0 +1,29 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 極形式で表された z の値 / Define the roots in polar form
+r = 1 / np.sqrt(2)
+theta_values = [-np.pi / 24 + n * np.pi / 2 for n in range(4)]  # 4つの解の角度
+
+# 各解を計算 / Calculate the roots in rectangular form
+z_values = [r * (np.cos(theta) + 1j * np.sin(theta)) for theta in theta_values]
+
+# 複素平面にプロット / Plot the solutions on the complex plane
+plt.figure(figsize=(6, 6))
+plt.axhline(0, color='black',linewidth=0.5)
+plt.axvline(0, color='black',linewidth=0.5)
+
+# プロット点の描画 / Plot the points
+for z in z_values:
+    plt.plot(z.real, z.imag, 'bo')
+
+# 単位円の描画 / Plot unit circle
+circle = plt.Circle((0, 0), r, color='r', fill=False, linestyle='--')
+plt.gca().add_artist(circle)
+
+plt.xlim([-1, 1])
+plt.ylim([-1, 1])
+plt.gca().set_aspect('equal', adjustable='box')
+plt.title('Complex Plane: Solutions to $z^4 = \\frac{1}{2}e^{-j \\frac{\\pi}{6}}$')
+plt.grid(True)
+plt.show()
