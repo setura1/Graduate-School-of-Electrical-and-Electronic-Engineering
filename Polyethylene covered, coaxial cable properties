@@ -1,0 +1,28 @@
+import numpy as np
+
+# Constants
+epsilon_0 = 8.854e-12  # F/m, permittivity of free space
+mu_0 = 4 * np.pi * 1e-7  # H/m, permeability of free space
+
+# Given parameters
+epsilon_r = 2.3  # Relative permittivity for polyethylene
+a = 1.2e-3  # Inner radius in meters (example)
+b = 4.4e-3  # Outer radius in meters (example)
+f = 5e9  # Frequency in Hz (example)
+
+# Calculate capacitance per unit length (C)
+C = (2 * np.pi * epsilon_r * epsilon_0) / np.log(b/a)
+print(f"Capacitance per unit length: {C} F/m")
+
+# Calculate characteristic impedance (Z0)
+L = mu_0 / (2 * np.pi) * np.log(b/a)  # Inductance per unit length (approximate formula)
+Z0 = np.sqrt(L / C)
+print(f"Characteristic impedance: {Z0} Ohms")
+
+# Attenuation parameters (example values)
+R = 3.11  # Resistance per unit length (example from image)
+G = 9.26e-4  # Conductance per unit length (example from image)
+
+# Calculate attenuation coefficient (alpha)
+alpha = (R / (2 * Z0)) + (G / 2) * np.sqrt(L / C)
+print(f"Attenuation coefficient: {alpha} Np/m")
