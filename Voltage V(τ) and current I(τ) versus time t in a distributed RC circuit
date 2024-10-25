@@ -1,0 +1,39 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.special import erfc
+
+# Constants
+Vs = 1.0  # Source voltage in volts (example value)
+R = 1.0   # Resistance in ohms (example value)
+C = 1.0   # Capacitance in farads (example value)
+x = 1.0   # Distance (example value)
+t = np.linspace(0.01, 10, 400)  # Time range for simulation
+
+# Calculate tau
+tau = 4 * t / (R * C * x**2)
+
+# Voltage and current equations based on the provided formulas
+V_tau = Vs * erfc(1 / np.sqrt(tau))
+I_tau = Vs * (2 / (R * x * np.sqrt(np.pi * tau))) * np.exp(-1 / tau)
+
+# Plotting the results
+plt.figure(figsize=(10, 5))
+
+# Plot voltage
+plt.subplot(1, 2, 1)
+plt.plot(t, V_tau, label='V(τ)', color='b')
+plt.title('Voltage V(τ) vs Time')
+plt.xlabel('Time (t)')
+plt.ylabel('Voltage V(τ)')
+plt.grid(True)
+
+# Plot current
+plt.subplot(1, 2, 2)
+plt.plot(t, I_tau, label='I(τ)', color='r')
+plt.title('Current I(τ) vs Time')
+plt.xlabel('Time (t)')
+plt.ylabel('Current I(τ)')
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
