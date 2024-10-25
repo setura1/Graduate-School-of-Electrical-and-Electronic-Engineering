@@ -1,0 +1,39 @@
+def lattice_diagram(V_s, r1, r2, num_reflections=5):
+    """
+    Simulates voltage reflections and transmissions in a lattice diagram.
+    
+    Parameters:
+    V_s : float
+        Source voltage.
+    r1 : float
+        Reflection coefficient at the near end.
+    r2 : float
+        Reflection coefficient at the far end.
+    num_reflections : int
+        Number of reflections to compute.
+    
+    Returns:
+    voltages : list of float
+        Voltage values after each reflection.
+    """
+    voltages = [V_s]  # Initial voltage
+    current_voltage = V_s * (1 + r1)  # After first reflection
+    
+    for n in range(1, num_reflections + 1):
+        voltages.append(current_voltage)
+        current_voltage *= r1 * r2  # Update for each additional reflection
+    
+    return voltages
+
+# Example parameters
+V_s = 1.0  # Source voltage
+r1 = 0.5   # Reflection coefficient at the near end
+r2 = 0.7   # Reflection coefficient at the far end
+num_reflections = 5  # Number of reflections to consider
+
+# Calculate the voltage reflections
+voltages = lattice_diagram(V_s, r1, r2, num_reflections)
+
+# Display the results
+for i, v in enumerate(voltages):
+    print(f"Reflection {i}: Voltage = {v:.4f} V")
