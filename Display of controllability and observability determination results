@@ -1,0 +1,21 @@
+# 可制御性行列の計算
+controllability_matrix = np.hstack([B, A @ B, A @ A @ B])
+controllability_rank = np.linalg.matrix_rank(controllability_matrix)
+
+# 可観測性行列の計算
+observability_matrix = np.vstack([C, C @ A, C @ A @ A])
+observability_rank = np.linalg.matrix_rank(observability_matrix)
+
+# 可制御性と可観測性の判定結果の表示
+print(f"Controllability matrix rank: {controllability_rank}")
+print(f"Observability matrix rank: {observability_rank}")
+
+if controllability_rank == A.shape[0]:
+    print("The system is controllable.")
+else:
+    print("The system is not controllable.")
+
+if observability_rank == A.shape[0]:
+    print("The system is observable.")
+else:
+    print("The system is not observable.")
